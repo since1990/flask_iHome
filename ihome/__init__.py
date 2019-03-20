@@ -4,6 +4,7 @@ from config import config_map
 from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
 from flask_wtf import CSRFProtect
+from ihome import api_1_0
 import redis
 
 # 数据库
@@ -11,6 +12,7 @@ db = SQLAlchemy()
 
 # redis链接对象
 redis_store = None
+
 
 # 工厂模式
 def create_app(config_name):
@@ -30,11 +32,12 @@ def create_app(config_name):
 
     # 利用flask-session将session对象保存到redis中
     Session(app)
-    # CSRFfanghu
+    # CSRF防护
     CSRFProtect(app)
-
     # 初始化redis
     global redis_store
     redis_store = redis.StrictRedis(host=config_class.REDIS_HOST, port=config_class.REDIS_PORT)
+    # 注册蓝图
+    app.register_blueprint(api_1_0.api, url_prefix="/api/v1.0")
 
     return app
