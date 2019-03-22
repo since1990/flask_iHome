@@ -6,6 +6,7 @@ from flask_session import Session
 from flask_wtf import CSRFProtect
 import logging
 from logging.handlers import RotatingFileHandler
+from ihome.utils.commons import ReConverter
 import redis
 
 # 数据库
@@ -50,8 +51,13 @@ def create_app(config_name):
     # 初始化redis
     global redis_store
     redis_store = redis.StrictRedis(host=config_class.REDIS_HOST, port=config_class.REDIS_PORT)
+    # 为flask添加自定义的转换器
+    app.url_map.converters["re"] = ReConverter
+
     # 注册蓝图
     from ihome import api_1_0
     app.register_blueprint(api_1_0.api, url_prefix="/api/v1.0")
+    from ihome import web_html
+    app.register_blueprint(web_html.html)
 
     return app
