@@ -19,6 +19,9 @@ function generateUUID() {
 }
 
 function generateImageCode() {
+    imageCodeId = generateUUID();
+    var url = "api/v1.0/image_codes/" + imageCodeId;
+    $(".image-code>img").attr("src", url)
 }
 
 function sendSMSCode() {
