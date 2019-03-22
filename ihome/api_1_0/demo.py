@@ -1,6 +1,7 @@
 # coding:utf-8
 from . import api
 from flask import current_app
+from ihome import db, models
 
 
 @api.route("/index")

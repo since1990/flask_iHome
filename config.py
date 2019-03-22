@@ -7,7 +7,7 @@ class Config(object):
     SECRET_KEY = "adsgayh164"
 
     # 数据库
-    SQLALCHEMY_DATABASE_URI = "mysql://root:mysql@192.168.80.133:3306/ihome_flask"
+    SQLALCHEMY_DATABASE_URI = "mysql://root:mysql@127.0.0.1:3306/ihome_flask"
     SQLALCHEMY_TRACK_MODIFICATIONS = True
 
     # redis
