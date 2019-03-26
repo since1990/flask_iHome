@@ -40,30 +40,27 @@ function sendSMSCode() {
         $(".phonecode-a").attr("onclick", "sendSMSCode();");
         return;
     }
-    $.get("/api/smscode", {mobile:mobile, code:imageCode, codeId:imageCodeId}, 
-        function(data){
-            if (0 != data.errno) {
-                $("#image-code-err span").html(data.errmsg); 
-                $("#image-code-err").show();
-                if (2 == data.errno || 3 == data.errno) {
-                    generateImageCode();
+
+    $.get("/api/v1.0/sms_codes/"+mobile, {image_code:imageCode, image_code_id:imageCodeId},function (data) {
+        if (data.errno == "0") {
+            // 表示发送成功
+            var num = 60;
+            var timer = setInterval(function () {
+                if (num > 1) {
+                    // 修改文本
+                    $(".phonecode-a").html(num + "秒");
+                    num -= 1;
+                } else {
+                    $(".phonecode-a").html("获取验证码");
+                    $(".phonecode-a").attr("onclick", "sendSMSCode();");
+                    clearInterval(timer);
                 }
-                $(".phonecode-a").attr("onclick", "sendSMSCode();");
-            }   
-            else {
-                var $time = $(".phonecode-a");
-                var duration = 60;
-                var intervalid = setInterval(function(){
-                    $time.html(duration + "秒"); 
-                    if(duration === 1){
-                        clearInterval(intervalid);
-                        $time.html('获取验证码'); 
-                        $(".phonecode-a").attr("onclick", "sendSMSCode();");
-                    }
-                    duration = duration - 1;
-                }, 1000, 60); 
-            }
-    }, 'json'); 
+            }, 1000)
+        } else {
+            alert(data.errmsg);
+            $(".phonecode-a").attr("onclick", "sendSMSCode();");
+        }
+    });
 }
 
 $(document).ready(function() {

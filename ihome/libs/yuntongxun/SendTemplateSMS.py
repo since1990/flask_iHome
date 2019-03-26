@@ -45,12 +45,18 @@ class CCP(object):
 
     def send_template_sms(self, to, datas, temp_id):
         result = self.rest.sendTemplateSMS(to, datas, temp_id)
-        for k, v in result.iteritems():
-            if k == 'templateSMS':
-                for k, s in v.iteritems():
-                    print '%s:%s' % (k, s)
-            else:
-                print '%s:%s' % (k, v)
+        # for k, v in result.iteritems():
+        #     if k == 'templateSMS':
+        #         for k, s in v.iteritems():
+        #             print '%s:%s' % (k, s)
+        #     else:
+        #         print '%s:%s' % (k, v)
+        status_code = result.get("statusCode")
+        if status_code == "000000":
+            # 表示发送成功
+            return 0
+        else:
+            return -1
 
 
 if __name__ == '__main__':
